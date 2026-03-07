@@ -200,8 +200,8 @@ function displayModal(detailsObj) {
                         ${detailsObj.status}
                     </div>
                 </li>
-                <li class="opacity-70 list-disc">Opened by ${detailsObj.author}</li>
-                <li class="opacity-70 list-disc">${detailsObj.createdAt.split("T")[0]}</li>
+                <li class="opacity-70 md:list-disc">Opened by ${detailsObj.author}</li>
+                <li class="opacity-70 md:list-disc">${detailsObj.createdAt.split("T")[0]}</li>
             </ul>
         </div>
 
