@@ -1,10 +1,12 @@
 
 async function loadAllIssues() {
+    spinner(true)
     const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues"
     try {
         const res = await fetch(url)
         const json = await res.json()
         displayALlIssues(json.data)
+        spinner(false)
         getCount()
     } catch (error) {
         console.log("Something went wrong")
@@ -24,7 +26,6 @@ function getCount() {
 }
 
 // loadAllIssues()
-
 function displayALlIssues(allIssues) {
     const cardContainer = document.getElementById("card-container");
     cardContainer.innerHTML = ""
@@ -62,11 +63,13 @@ function displayALlIssues(allIssues) {
 
 // load all cards of open-section
 async function loadOpenData() {
+    spinner(true)
     const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues"
     try {
         const res = await fetch(url)
         const json = await res.json();
         displayOpenIssues(json.data)
+        spinner(false)
         getCount()
     } catch (error) {
         console.log("Something went wrong")
@@ -112,11 +115,13 @@ function displayOpenIssues(alldata) {
 
 // load closed issues
 async function loadClosedData() {
+    spinner(true)
     const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues"
     try {
         const res = await fetch(url)
         const json = await res.json();
         displayClosedIssues(json.data)
+        spinner(false)
         getCount()
     } catch (error) {
         console.log("Something went wrong")
@@ -158,6 +163,28 @@ function displayClosedIssues(alldata) {
         `
         cardContainer.appendChild(issueCard)
     }
+}
+
+// async function for searching issues
+async function searchIssues() {
+    spinner(true)
+    const searchValue = document.getElementById("input-search").value.toLowerCase()
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`
+    try {
+        const res = await fetch(url);
+        const json = await res.json()
+        getSearchItems(json.data, searchValue)
+        spinner(false)
+        getCount()
+    } catch (error) {
+        console.log("Something went wrong")
+    }
+}
+
+// filter functionality for search
+function getSearchItems(arr, searchValue) {
+    const filterIssues = arr.filter(item => item.title.toLowerCase().includes(searchValue))
+    displayALlIssues(filterIssues)
 }
 
 // modal funtionality here
@@ -313,7 +340,6 @@ function updateModalStatus(status) {
     }
 }
 
-
 // update the status circle
 function updateStatusCirlce(status) {
     if (status === "open") {
@@ -355,5 +381,19 @@ function updateBadgeColors(item) {
     }
     else {
         return "border-gray-300 bg-gray-100 text-gray-500"
+    }
+}
+
+// spinner
+function spinner(status) {
+    const spinner = document.getElementById("spinner")
+    const cardContainer = document.getElementById("card-container")
+    if (status === true) {
+        spinner.classList.remove("hidden")
+        cardContainer.classList.add("hidden")
+    }
+    else if (status === false) {
+        spinner.classList.add("hidden")
+        cardContainer.classList.remove("hidden")
     }
 }

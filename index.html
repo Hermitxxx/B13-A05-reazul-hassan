@@ -33,10 +33,9 @@
                             <path d="m21 21-4.3-4.3"></path>
                         </g>
                     </svg>
-                    <input type="search" required placeholder="Search issues..." />
+                    <input id="input-search" type="search" required placeholder="Search issues..." />
                 </label>
-                <!-- <button class="btn" onclick="issue_modal.showModal()">open modal</button> -->
-                <button class="btn btn-primary">Search</button>
+                <button onclick="searchIssues()" class="btn btn-primary">Search</button>
             </div>
         </nav>
     </header>
@@ -78,6 +77,10 @@
                     </ul>
                 </div>
             </div>
+        </section>
+
+        <section id="spinner" class="flex items-center justify-center p-20 hidden">
+            <span class="loading loading-spinner loading-xl"></span>
         </section>
 
         <section id="card-container" class="mt-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
