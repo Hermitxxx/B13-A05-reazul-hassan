@@ -160,6 +160,76 @@ function displayClosedIssues(alldata) {
     }
 }
 
+// modal funtionality here
+const cardContainer = document.getElementById("card-container")
+
+cardContainer.addEventListener("click", function (ev) {
+    const target = ev.target.closest(".issue-card");
+    if (!target) return;
+
+    let cardId = target.getAttribute("id")
+    const cardApi = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${cardId}`;
+
+    async function getCardDetails() {
+        try {
+            const res = await fetch(cardApi);
+            const json = await res.json()
+            displayModal(json.data)
+        } catch (error) {
+            console.log("Something went wrong")
+        }
+    }
+
+    getCardDetails()
+
+})
+
+// display modal
+function displayModal(detailsObj) {
+    console.log(detailsObj)
+    // get the modal container
+    const modal = document.getElementById("issue_modal")
+    const modalDetailsContainer = document.getElementById("modal-issue-details")
+    modalDetailsContainer.innerHTML = ""
+    modalDetailsContainer.innerHTML = `
+        <h1 class="font-semibold text-xl md:text-2xl">${detailsObj.title}</h1>
+        <div>
+            <ul class="flex items-start md:items-center gap-2 md:gap-7 flex-col md:flex-row">
+                <li>
+                    <div id="issue-status-modal" class="badge p-4 ${updateModalStatus(detailsObj.status)} text-white rounded-full">
+                        ${detailsObj.status}
+                    </div>
+                </li>
+                <li class="opacity-70 list-disc">Opened by ${detailsObj.author}</li>
+                <li class="opacity-70 list-disc">${detailsObj.createdAt.split("T")[0]}</li>
+            </ul>
+        </div>
+
+        <div class="labels flex items-center gap-2">
+            ${updateBadgeLables(detailsObj.labels)}
+        </div>
+
+        <p class="opacity-70">
+            ${detailsObj.description}
+        </p>
+
+        <div class="author grid grid-cols-2 gap-2 md:gap-4">
+            <div class="author-name space-y-1">
+                <p class="opacity-70">Assignee:</p>
+                <h2 class="font-semibold text-md md:text-lg">${detailsObj.assignee ? detailsObj.assignee : detailsObj.author}</h2>
+            </div>
+
+            <div class="priority space-y-1">
+                <p class="opacity-70">Priority:</p>
+                <div id="issue-priority-modal" class="badge px-4 py-3 ${getPriorityModal(detailsObj.priority)} text-white rounded-full">
+                    ${detailsObj.priority.toUpperCase()}
+                </div>
+            </div>
+        </div>
+    `
+    modal.showModal()
+}
+
 // get triggered by the clicks on the toggles 
 const toggles = document.querySelector(".toggle-area");
 
@@ -185,7 +255,7 @@ function removeActive(target) {
     const selected = target;
     // get all btns 
     const allToggles = document.querySelectorAll(".btn-toggle")
-    
+
     // remove all active calsses (btn-primary)
     allToggles.forEach(el => {
         el.classList.remove("btn-primary")
@@ -209,6 +279,20 @@ function getPriorityClass(priority) {
     return "bg-green-100 text-green-500";
 }
 
+// update priority for modal
+function getPriorityModal(priority) {
+    if (priority === "high") {
+        return "bg-red-600"
+    }
+    else if (priority === "medium") {
+        return "bg-orange-600"
+    }
+    else if (priority === "low") {
+        return "bg-gray-600"
+    }
+    return "bg-green-600";
+}
+
 // update card style according to status
 function updateCard(status) {
     if (status === "open") {
@@ -218,6 +302,17 @@ function updateCard(status) {
         return "border-t-purple-600"
     }
 }
+
+// update modal status 
+function updateModalStatus(status) {
+    if (status === "open") {
+        return "bg-green-600 text-white"
+    }
+    else if (status === "closed") {
+        return "bg-purple-600 text-white"
+    }
+}
+
 
 // update the status circle
 function updateStatusCirlce(status) {
@@ -241,7 +336,7 @@ function statusCircleIcon(status) {
 
 // update labels
 function updateBadgeLables(labels) {
-    return labels.map(item => `<div class="badge text-center w-auto h-auto p-2 rounded-full border ${updateBadgeColors(item)}">${item.toUpperCase()}</div>`).join("")
+    return labels.map(item => `<div class="badge text-center w-auto h-auto py-1 px-2 rounded-full border ${updateBadgeColors(item)}">${item.toUpperCase()}</div>`).join("")
 }
 
 // update bade colors
