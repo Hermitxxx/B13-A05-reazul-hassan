@@ -51,9 +51,9 @@ function displayALlIssues(allIssues) {
 
                 </div>
 
-                <div class="issue-author">
+                <div class="issue-author space-y-2">
                     <p id="author-name" class="opacity-60">#${issue.id} by ${issue.author}</p>
-                    <p id="issue-date" class="opacity-60">${issue.createdAt}</p>
+                    <p id="issue-date" class="opacity-60">${issue.createdAt.split("T")[0]}</p>
                 </div>
             </div>
         `
@@ -103,9 +103,9 @@ function displayOpenIssues(alldata) {
 
                 </div>
 
-                <div class="issue-author">
+                <div class="issue-author space-y-2">
                     <p id="author-name" class="opacity-60">#${issue.id} by ${issue.author}</p>
-                    <p id="issue-date" class="opacity-60">${issue.createdAt}</p>
+                    <p id="issue-date" class="opacity-60">${issue.createdAt.split("T")[0]}</p>
                 </div>
             </div>
         `
@@ -155,9 +155,9 @@ function displayClosedIssues(alldata) {
 
                 </div>
 
-                <div class="issue-author">
+                <div class="issue-author space-y-2">
                     <p id="author-name" class="opacity-60">#${issue.id} by ${issue.author}</p>
-                    <p id="issue-date" class="opacity-60">${issue.createdAt}</p>
+                    <p id="issue-date" class="opacity-60">${issue.createdAt.split("T")[0]}</p>
                 </div>
             </div>
         `
